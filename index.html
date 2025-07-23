@@ -1,0 +1,1417 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Hari Krishna Chandragiri | Software Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.5/swiper-bundle.min.css" rel="stylesheet">
+<script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+<style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Rubik', sans-serif;
+      background: linear-gradient(to right, #f8fbff, #e0f7fa);
+      margin: 0;
+      padding: 0;
+      color: #2d3436;
+    }
+    body.dark-mode {
+      background: linear-gradient(to right, #2d3436, #37474f);
+      color: #e0f7fa;
+    }
+    body.dark-mode header {
+      background: linear-gradient(to right, #0d47a1, #546e7a);
+    }
+    body.dark-mode header p {
+      color: #b0bec5;
+    }
+    body.dark-mode header::after {
+      background: #0d47a1;
+    }
+    body.dark-mode nav {
+      background: #0d47a1;
+      border-bottom-color: #1565c0;
+    }
+    body.dark-mode nav a {
+      color: #e0f7fa;
+    }
+    body.dark-mode nav a:hover::after {
+      background: #e0f7fa;
+    }
+    body.dark-mode .hamburger i {
+      color: #e0f7fa;
+    }
+    body.dark-mode .nav-menu.active {
+      background: #0d47a1;
+    }
+    body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, body.dark-mode h4, body.dark-mode p, body.dark-mode a {
+      color: #e0f7fa;
+    }
+    body.dark-mode h2 {
+      border-left-color: #0d47a1;
+    }
+    body.dark-mode .card {
+      background: #37474f;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+      border: 2px solid #90caf9;
+    }
+    body.dark-mode .card:hover {
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+    }
+    body.dark-mode .skill-group span {
+      background: #0d47a1;
+      color: #e0f7fa;
+      border-color: #5472d3;
+    }
+    body.dark-mode .skill-group span:nth-child(5n+1) { background-color: #0d47a1; }
+    body.dark-mode .skill-group span:nth-child(5n+2) { background-color: #c2185b; }
+    body.dark-mode .skill-group span:nth-child(5n+3) { background-color: #f57c00; }
+    body.dark-mode .skill-group span:nth-child(5n+4) { background-color: #388e3c; }
+    body.dark-mode .skill-group span:nth-child(5n) { background-color: #7b1fa2; }
+    body.dark-mode .skill-group span.active {
+      background-color: #1565c0;
+    }
+    body.dark-mode .project-link {
+      color: #90caf9;
+    }
+    body.dark-mode .project-link:hover {
+      color: #e0f7fa;
+    }
+    body.dark-mode .project-link:hover i {
+      filter: brightness(1.2);
+    }
+    body.dark-mode .download-btn, body.dark-mode .back-to-top {
+      background: #0d47a1;
+    }
+    body.dark-mode .download-btn:hover, body.dark-mode .back-to-top:hover {
+      background: #42a5f5;
+    }
+    body.dark-mode .links a {
+      color: #90caf9;
+    }
+    body.dark-mode .links a:hover {
+      color: #e0f7fa;
+    }
+    body.dark-mode .links a:hover img, body.dark-mode .links a:hover i {
+      filter: brightness(1.2);
+    }
+    body.dark-mode section:last-of-type a {
+      color: #90caf9;
+    }
+    body.dark-mode section:last-of-type a:hover {
+      color: #e0f7fa;
+    }
+    body.dark-mode section:last-of-type a:hover img {
+      filter: brightness(1.2);
+    }
+    body.dark-mode footer {
+      background: #263238;
+    }
+    body.dark-mode footer button {
+      background: #e0f7fa;
+      color: #0d47a1;
+    }
+    body.dark-mode form input, body.dark-mode form textarea {
+      background: #546e7a;
+      color: #e0f7fa;
+      border-color: #0d47a1;
+    }
+    body.dark-mode form button {
+      background: #0d47a1;
+    }
+    body.dark-mode form button:hover {
+      background: #42a5f5;
+    }
+    body.dark-mode #form-message {
+      color: #e0f7fa;
+    }
+    nav {
+      background: #1c92d2;
+      opacity: 0.9;
+      padding: 10px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 2px solid #1565c0;
+      width: 100%;
+    }
+    .nav-container {
+      max-width: 1150px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: flex-end;
+      padding-right: 20px;
+    }
+    .nav-menu {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      gap: 15px;
+    }
+    .nav-menu li {
+      margin部分: margin: 0;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 8px 10px;
+      position: relative;
+      transition: color 0.3s ease;
+      font-size: 0.85rem;
+    }
+    nav a:hover::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background: #fff;
+      bottom: -2px;
+      left: 0;
+      transition: width 0.3s ease;
+    }
+    .hamburger {
+      display: none;
+      font-size: 1.5rem;
+      color: #fff;
+      cursor: pointer;
+      position: absolute09:36 PM IST, Tuesday, July 22, 2025 absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    header {
+      background: linear-gradient(to right, #1c92d2, #f2fcfe);
+      color: #222;
+      padding: 80px 20px;
+      text-align: center;
+      position: relative;
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: #1c92d2;
+    }
+    header h1 {
+      font-size: 3.5rem;
+      margin: 0 0 10px;
+    }
+    header p {
+      font-size: 1.3rem;
+      color: #555;
+      white-space: normal;
+      word-wrap: break-word;
+      text-align: center;
+    }
+    .container {
+      max-width: 1150px;
+      margin: auto;
+      padding: 60px 20px;
+      overflow: visible;
+    }
+    section {
+      margin-bottom: 60px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+      background: url('https://cdn.pixabay.com/photo/2018/07/15/19/51/rangoli-3540527_1280.jpg') no-repeat center center;
+      background-size: cover;
+      background-attachment: fixed;
+      opacity: 0.2;
+      padding: 20px;
+      border-radius: 14px;
+      display: block;
+    }
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .card {
+      background player: white;
+      border-radius: 14px;
+      padding: 30px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.6s ease-out, transform 0.6s ease-out;
+      margin-bottom: 30px;
+      opacity: 0;
+      transform: translateX(-20px);
+      position: relative;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+      overflow: visible;
+      z-index: 1;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: url('https://cdn.pixabay.com/photo/2018/07/15/19/51/rangoli-3540527_1280.jpg') no-repeat center center;
+      background-size: cover;
+      opacity: 0.5;
+      border-radius: 14px;
+      z-index: -1;
+    }
+    body.dark-mode .card::before {
+      opacity: 0.7;
+      border: 2px solid #90caf9;
+    }
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+    }
+    .card:hover .skill-group span {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .card:hover .skill-group span.active {
+      opacity: 1;
+    }
+    .card-content {
+      position: relative;
+      z-index: 2;
+    }
+    section h2 {
+      font-size: 2rem;
+      color: #1c92d2;
+      border-left: 5px solid #1c92d2;
+      padding-left: 15px;
+      margin-bottom: 25px;
+    }
+    ul { padding-left: 25px; }
+    li { margin-bottom: 12px; }
+    .skill-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .skill-group span {
+      display: inline-block;
+      padding: 6px 12px;
+      margin: 5px;
+      font-size: 0.75rem;
+      border-radius: 20px;
+      font-weight: 600;
+      color: white;
+      background-color: #607d8b;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+    }
+    .skill-group span:nth-child(5n+1) { background-color: #1c92d2; }
+    .skill-group span:nth-child(5n+2) { background-color: #e91e63; }
+    .skill-group span:nth-child(5n+3) { background-color: #ff9800; }
+    .skill-group span:nth-child(5n+4) { background-color: #4caf50; }
+    .skill-group span:nth-child(5n) { background-color: #9c27b0; }
+    .skill-group span:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      cursor: pointer;
+    }
+    .project-link {
+      display: block;
+      color: #1c92d2;
+      font-size: 0.9rem;
+      text-decoration: none;
+      margin-top: 15px;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+    .project-link i {
+      vertical-align: middle;
+      margin-right: 8px;
+      font-size: 0.9rem;
+      transition: transform 0.3s ease;
+    }
+    .project-link:hover {
+      color: #0d47a1;
+      text-decoration: underline;
+    }
+    .project-link:hover i {
+      transform: scale(1.2);
+    }
+    .download-btn, .back-to-top {
+      background: #1c92d2;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      z-index: 1000;
+      animation: bounceIn 0.5s ease-out, scaleMotion 1.2s ease-in-out infinite, kolamPulse 2s infinite;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+      transition: background 0.3s ease, transform 0.3s ease, padding 0.3s ease, font-size 0.3s ease;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+      position: fixed;
+      text-align: center;
+    }
+    .download-btn {
+      padding: 16px 32px;
+      font-size: 1rem;
+      right: 20px;
+      bottom: 20px;
+    }
+    .download-btn.enlarged {
+      padding: 20px 40px;
+      font-size: 1.2rem;
+    }
+    .back-to-top {
+      padding: 10px 20px;
+      font-size: 0.85rem;
+      left: 20px;
+      bottom: 70px;
+      display: none;
+    }
+    .download-btn::before, .back-to-top::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: url('https://cdn.pixabay.com/photo/2018/07/15/19/51/rangoli-3540527_1280.jpg') no-repeat center center;
+      background-size: cover;
+      opacity: 0.5;
+      border-radius: 8px;
+      z-index: -1;
+    }
+    body.dark-mode .download-btn::before, body.dark-mode .back-to-top::before {
+      opacity: 0.7;
+      border: 2px solid #90caf9;
+    }
+    .download-btn:hover, .back-to-top:hover {
+      background: #1565c0;
+      transform: scale(1.05);
+    }
+    body.dark-mode .download-btn:hover, body.dark-mode .back-to-top:hover {
+      background: #42a5f5;
+    }
+    .links a {
+      margin-right: 20px;
+      font-weight: 600;
+      color: #1c92d2;
+      text-decoration: none;
+      transition: color 0.3s ease, transform 0.3s ease;
+      display: inline-block;
+      font-size: 1.3rem;
+    }
+    .links a:hover {
+      color: #0d47a1 !important;
+      transform: scale(1.05);
+    }
+    .links a img, .links a i {
+      vertical-align: middle;
+      margin-right: 8px;
+      width: 24px;
+      height: 24px;
+      transition: transform 0.3s ease;
+    }
+    .links a i.fa-x-twitter {
+      display: inline-block;
+    }
+    .links a:hover img, .links a:hover i {
+      transform: scale(1.2);
+    }
+    section:last-of-type a {
+      transition: color 0.3s ease, transform 0.3s ease;
+      display: inline-block;
+    }
+    section:last-of-type a:hover {
+      color: #0d47a1 !important;
+      text-decoration: underline;
+      transform: scale(1.05);
+    }
+    section:last-of-type img {
+      transition: transform 0.3s ease;
+    }
+    section:last-of-type a:hover img {
+      transform: scale(1.2);
+    }
+    .profile-img-container {
+      width: 300px;
+      height: 434px;
+      margin: 0 auto 20px;
+      position: relative;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      overflow: hidden;
+      z qty: 2;
+      animation: pulseFloat 4s ease-in-out infinite;
+      box-shadow: 0 0 20px rgba(28, 146, 210, 0.6);
+    }
+    body.dark-mode .profile-img-container {
+      border-color: #5472d3;
+      box-shadow: 0 0 20px rgba(144, 202, 249, 0.6);
+    }
+    .profile-img-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    @keyframes pulseFloat {
+      0%, 100% {
+        transform: translateY(0);
+        box-shadow: 0 0 20px rgba(28, 146, 210, 0.6);
+      }
+      50% {
+        transform: translateY(-10px);
+        box-shadow: 0 0 30px rgba(28, 146, 210, 0.8);
+      }
+    }
+    body.dark-mode .profile-img-container {
+      animation: pulseFloatDark 4s ease-in-out infinite;
+    }
+    @keyframes pulseFloatDark {
+      0%, 100% {
+        transform: translateY(0);
+        box-shadow: 0 0 20px rgba(144, 202, 249, 0.6);
+      }
+      50% {
+        transform: translateY(-10px);
+        box-shadow: 0 0 30px rgba(144, 202, 249, 0.8);
+      }
+    }
+    @keyframes bounceIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      60% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+    @keyframes scaleMotion {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    @keyframes kolamPulse {
+      0%, 100% { box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1); }
+      50% { box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); }
+    }
+    .certificate-img {
+      width: 200px;
+      height: 300px;
+      object-fit: contain;
+      border-radius: 10px;
+      border: 2px solid #ccc;
+      cursor: pointer;
+      display: block;
+      margin: 0 auto;
+      animation: fadeIn 1s ease-in-out;
+    }
+    body.dark-mode .certificate-img {
+      border-color: #5472d3;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .swiper {
+  margin-bottom: 20px;
+      width: 100%;
+      padding: 20px 0;
+    }
+    .swiper-slide {
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .swiper-button-next, .swiper-button-prev {
+      color: #1c92d2;
+      background: url('https://cdn.pixabay.com/photo/2018/07/15/19/51/rangoli-3540527_1280.jpg') no-repeat center center;
+      background-size: cover;
+      opacity: 0.5;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      transition: opacity 0.3s ease;
+    }
+    .swiper-button-next:hover, .swiper-button-prev:hover {
+      opacity: 0.8;
+    }
+    body.dark-mode .swiper-button-next, body.dark-mode .swiper-button-prev {
+      color: #90caf9;
+      opacity: 0.7;
+    }
+    body.dark-mode .swiper-button-next:hover, body.dark-mode .swiper-button-prev:hover {
+      opacity: 1;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      max-width: 500px;
+      margin: 20px auto;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+      position: relative;
+    }
+    form::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: url('https://cdn.pixabay.com/photo/2018/07/15/19/51/rangoli-3540527_1280.jpg') no-repeat center center;
+      background-size: cover;
+      opacity: 0.5;
+      border-radius: 5px;
+      z-index: -1;
+    }
+    body.dark-mode form::before {
+      opacity: 0.7;
+      border: 2px solid #90caf9;
+    }
+    form input, form textarea {
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-family: 'Rubik', sans-serif;
+      font-size: 1rem;
+      background: #fff;
+      color: #2d3436;
+    }
+    form textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    form button {
+      background: #1c92d2;
+      color: #fff;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    form button:hover {
+      background: #1565c0;
+    }
+    #form-message {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: #2d3436;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #1c92d2;
+      color: white;
+      font-weight: 500;
+      position: relative;
+      z-index: 1;
+    }
+    footer button {
+      margin-left: 20px;
+      padding: 6px 12px;
+      background: white;
+      color: #1c92d2;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    footer button:hover {
+      background: #1565c0;
+      color: white;
+    }
+    #imageModal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      animation: fadeZoom 0.3s ease-out;
+    }
+    #imageModal span {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 2rem;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    #modalImg {
+      width: auto;
+      height: auto;
+      max-width: 80vw;
+      max-height: 80vh;
+      border: 5px solid white;
+      border-radius: 8px;
+      box-shadow: 0 0 20px #000;
+      animation: zoomIn 0.4s ease;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+    }
+    .modal-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.7);
+      border: none;
+      font-size: 2rem;
+      padding: 10px 16px;
+      cursor: pointer;
+      z-index: 10000;
+    }
+    .modal-prev { left: 20px; }
+    .modal-next { right: 20px; }
+    @keyframes zoomIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    @keyframes fadeZoom {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    @media (max-width: 768px) {
+      .nav-menu {
+        gap: 8px;
+      }
+      nav a {
+        padding: 8px 8px;
+        font-size: 0.8rem;
+      }
+      .download-btn {
+        padding: 14px 28px;
+        font-size: 0.95rem;
+      }
+      .download-btn.enlarged {
+        padding: 18px 36px;
+        font-size: 1.1rem;
+      }
+      .back-to-top {
+        padding: 8px 16px;
+        font-size: 0.8rem;
+      }
+      section {
+        background-size: contain;
+      }
+      .card::before, form::before, .download-btn::before, .back-to-top::before {
+        background-size: contain;
+      }
+      .swiper-slide {
+        width: 50%;
+      }
+      .profile-img-container {
+        width: 225px;
+        height: 326px;
+      }
+      header h1 {
+        font-size: 2.5rem;
+      }
+      header p {
+        font-size: 1.1rem;
+      }
+    }
+    @media (max-width: 600px) {
+      .hamburger {
+        display: block;
+      }
+      .nav-container {
+        justify-content: flex-start;
+      }
+      .nav-menu {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background: #1c92d2;
+        width: 200px;
+        padding: 10px;
+        border-radius: 0 0 5px 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+      .nav-menu.active {
+        display: flex;
+      }
+      nav a {
+        padding: 10px;
+        font-size: 0.8rem;
+      }
+      header h1 {
+        font-size: 2rem;
+      }
+      header p {
+        font-size: 1.1rem;
+      }
+      .card {
+        padding: 20px;
+      }
+      .download-btn {
+        padding: 14px 28px;
+        font-size: 0.95rem;
+      }
+      .download-btn.enlarged {
+        padding: 18px 36px;
+        font-size: 1.1rem;
+      }
+      .back-to-top {
+        padding: 8px 16px;
+        font-size: 0.8rem;
+      }
+      section {
+        background-size: contain;
+      }
+      .card::before, form::before, .download-btn::before, .back-to-top::before {
+        background-size: contain;
+      }
+      .swiper-slide {
+        width: 100%;
+      }
+      .profile-img-container {
+        width: 180px;
+        height: 260px;
+      }
+      .links a {
+        margin-right: 15px;
+        font-size: 1.2rem;
+      }
+      .links a img, .links a i {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  
+@media (max-width: 480px) {
+  header h1 {
+    font-size: 1.8rem;
+  }
+  header p {
+    font-size: 1rem;
+  }
+}
+
+
+@media (max-width: 600px) {
+  .links {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+    padding-left: 20px;
+  }
+}
+
+</style>
+</link></head>
+<body>
+<nav>
+<div class="hamburger"><i class="fas fa-bars"></i></div>
+<div class="nav-container">
+<ul class="nav-menu">
+<li><a href="#about">About</a></li>
+<li><a href="#experience">Experience</a></li>
+<li><a href="#courses">Courses</a></li>
+<li><a href="#projects">Projects</a></li>
+<li><a href="#skills">Skills</a></li>
+<li><a href="#certifications">Certifications</a></li>
+<li><a href="#connect">Connect</a></li>
+<li><a href="#contact">Contact</a></li>
+</ul>
+</div>
+</nav>
+<header>
+<h1><span id="typed"></span></h1>
+<p>Software Developer | Java Developer | Web Developer</p>
+</header>
+<div class="container">
+<section id="about">
+<div class="profile-img-container">
+<img alt="Hari Krishna" draggable="false" src="https://drive.google.com/thumbnail?id=19I-br8cWq6MVfIEr0iS6CuUuFaJLFXLk&amp;sz=w1200"/>
+</div>
+<h2>About Me</h2>
+<div class="card">
+<div class="card-content">
+<p>I’m Hari Krishna Chandragiri, a passionate Java Backend Developer with hands-on experience in building scalable, secure, and high-performance applications. With a strong foundation in software development, I specialize in crafting robust backend systems using Java, Spring Boot, and microservices architecture. My journey includes real-world projects in banking, fraud detection, and property management, where I’ve honed my skills in RESTful APIs, database design, and cloud deployment. I thrive in collaborative environments, leveraging Agile methodologies and tools like Git, Jira, and Postman to deliver quality solutions.</p>
+<ul>
+<li>Proficient in designing and implementing microservices with Spring Boot and REST APIs.</li>
+<li>Experienced in database management with PostgreSQL, MySQL, Oracle, and Redis caching.</li>
+<li>Skilled in writing clean, testable code with JUnit and ensuring API reliability with Postman.</li>
+<li>Passionate about learning emerging technologies like Apache Kafka and cloud platforms like AWS.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="experience">
+<h2>Experience</h2>
+<div class="card">
+<div class="card-content">
+<strong>Project Intern – InfoSpoke Integrated Solutions LLP, Hyderabad</strong>
+<ul>
+<li>Contributed to a real-time banking project, developing secure and scalable backend services using Java, Spring Boot, and RESTful APIs.</li>
+<li>Designed and implemented microservice modules, following clean architecture and industry best practices.</li>
+<li>Developed robust backend validations to enforce business rules and ensure API reliability.</li>
+<li>Learned about implementing OTP (One-Time Password) mechanisms for secure user authentication and transaction flows.</li>
+<li>Identified, raised, and resolved multiple bugs during testing, improving application stability and performance.</li>
+<li>Collaborated with the team to design and manage database tables, contributing ideas to improve data structure and normalization.</li>
+<li>Worked closely with frontend and QA teams to ensure smooth integration and a seamless user experience.</li>
+<li>Wrote and executed unit and integration tests using JUnit, reducing bugs and improving code quality.</li>
+<li>Used PostgreSQL and Oracle databases; implemented Redis caching to enhance performance and scalability.</li>
+<li>Handled Excel file uploads and bulk data processing for large-scale imports.</li>
+<li>Migrated native SQL queries to Hibernate/JPA, improving ORM practices and maintainability.</li>
+<li>Tested and validated APIs with Postman to ensure correct request/response structures and business logic.</li>
+<li>Used Feign Clients for internal microservice communication and integrated external APIs using RestTemplate.</li>
+<li>Learned the basics of Apache Kafka and its role in building event-driven microservices during the agent onboarding module.</li>
+<li>Gained exposure to Spring Security, including JWT authentication and role-based authorization.</li>
+<li>Used GitHub, GitLab, Figma, and Jira for version control, design reviews, and Agile project management.</li>
+<li>Debugged production-like issues by analyzing logs and tracing code paths across services.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="courses">
+<h2>Courses</h2>
+<div class="card">
+<div class="card-content">
+<h3>Java Full Stack Web Development – Tap Academy</h3>
+<p>Completed a structured training program focused on full-stack web development.</p>
+<ul>
+<li>Learned Java programming fundamentals, including object-oriented principles, exception handling, collections, and basic multithreading.</li>
+<li>Gained hands-on experience with frontend technologies such as HTML, CSS, and JavaScript to design basic user interfaces.</li>
+<li>Explored backend development using Java EE (Servlets, JSP) and an introduction to the Spring Framework.</li>
+<li>Studied SQL and RDBMS concepts for managing and querying relational databases.</li>
+<li>Acquired foundational knowledge that helped in developing individual projects, applying both frontend and backend skills.</li>
+<li>Benefited from interactive sessions, doubt clearing, and mentorship that strengthened my understanding of full-stack development.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="projects">
+<h2>Projects</h2>
+<div class="card">
+<div class="card-content">
+<h3>Agency Banking System</h3>
+<p>A microservice-based Java backend application to manage agents, customers, and transactions securely. Built with Spring Boot, REST APIs, JPA, and PostgreSQL, it features role-based access control and OTP-based authentication. Deployed on AWS with Docker containers, ensuring scalability and high availability. The system processes thousands of transactions daily with robust error handling and logging.</p>
+<div class="skill-group" data-skills="Java,Spring Boot,PostgreSQL,REST API,Microservices">
+<span>Java</span><span>Spring Boot</span><span>PostgreSQL</span><span>REST API</span><span>Microservices</span>
+</div>
+<a class="project-link" href="https://github.com/Hariroyal2425/agency-banking-system" target="_blank"><i class="fas fa-link"></i>View on GitHub</a>
+</div>
+</div>
+<div class="card">
+<div class="card-content">
+<h3>Internet Fraud Detection (Node2Vec)</h3>
+<p>Graph-based fraud detection system using Node2Vec embeddings and anomaly detection algorithms. Built with Python, it processes large transaction datasets, creating a graph model with Pandas and NetworkX. Node2Vec embeddings were trained to detect fraudulent patterns, achieving 85% accuracy in identifying anomalies. Visualized results using Matplotlib for stakeholder presentations.</p>
+<div class="skill-group" data-skills="Python,Node2Vec,Graph Algorithms,Pandas,Matplotlib">
+<span>Python</span><span>Node2Vec</span><span>Graph Algorithms</span><span>Pandas</span><span>Matplotlib</span>
+</div>
+<a class="project-link" href="https://github.com/Hariroyal2425/internet-fraud-detection" target="_blank"><i class="fas fa-link"></i>View on GitHub</a>
+</div>
+</div>
+<div class="card">
+<div class="card-content">
+<h3>Online Voting System</h3>
+<p>Secure online voting platform with user authentication, candidate management, and real-time vote tracking. Developed using Java, Spring Boot, and MySQL, with Spring Security for JWT-based authentication and role-based access (admin, voter). Implemented REST APIs for vote submission and result aggregation, ensuring data integrity. Scalable design supports thousands of concurrent users with Redis caching.</p>
+<div class="skill-group" data-skills="Java,Spring Boot,MySQL,Spring Security,REST API">
+<span>Java</span><span>Spring Boot</span><span>MySQL</span><span>Spring Security</span><span>REST API</span>
+</div>
+<a class="project-link" href="https://github.com/Hariroyal2425/online-voting-system" target="_blank"><i class="fas fa-link"></i>View on GitHub</a>
+</div>
+</div>
+<div class="card">
+<div class="card-content">
+<h3>Property Management System</h3>
+<p>Full-stack application for listing and managing rental properties with real-time updates. Built with a Java Spring Boot backend, Angular frontend, and PostgreSQL database, it supports property CRUD operations via REST APIs. Integrated real-time notifications using WebSockets for tenant updates. Optimized database queries with JPA for efficient property searches and filtering.</p>
+<div class="skill-group" data-skills="Java,Spring Boot,Angular,PostgreSQL,REST API">
+<span>Java</span><span>Spring Boot</span><span>Angular</span><span>PostgreSQL</span><span>REST API</span>
+</div>
+<a class="project-link" href="https://github.com/Hariroyal2425/property-management-system" target="_blank"><i class="fas fa-link"></i>View on GitHub</a>
+</div>
+</div>
+</section>
+<section id="skills">
+<h2>Skills</h2>
+<div class="skill-group">
+<h4>Languages</h4>
+<span>Java</span><span>Python</span><span>SQL</span><span>JavaScript</span><span>HTML</span><span>PHP</span>
+</div>
+<div class="skill-group">
+<h4>Frameworks &amp; Tools</h4>
+<span>Spring Boot</span><span>Spring Security</span><span>Hibernate</span><span>JPA</span><span>JUnit</span>
+<span>REST APIs</span><span>MySQL</span><span>PostgreSQL</span><span>MongoDB</span><span>Oracle</span>
+<span>Redis</span><span>Git</span><span>GitHub</span><span>GitLab</span><span>Postman</span>
+<span>Jira</span><span>Swagger</span><span>Kafka</span><span>Angular</span>
+</div>
+</section>
+<section id="certifications" style="margin-bottom: -120px !important; padding-bottom: 5px !important;">
+<h2>Certifications</h2><style>#certifications h2 { margin-bottom: -90px !important; }</style>
+<div class="swiper">
+<div class="swiper-wrapper">
+<div class="swiper-slide">
+<img alt="Project Intern Certificate" class="certificate-img" onclick="openModal(this.src)" src="https://drive.google.com/thumbnail?id=15cGWYEDUySaTaEqHGV0ezC0bK5uYCEcK&amp;sz=w1200">
+<h4>Project Intern</h4>
+<p>InfoSpoke Integrated Solutions LLP</p>
+</img></div>
+<div class="swiper-slide">
+<img alt="Full Stack Web Development Certificate" class="certificate-img" onclick="openModal(this.src)" src="https://drive.google.com/thumbnail?id=10JCemQtUyxkBwhehNKlVosUJgziL0t7X&amp;sz=w1200"/>
+<h4>Full Stack Web Development</h4>
+<p>Tap Academy</p>
+</div>
+<div class="swiper-slide">
+<img alt="Web Application Pentester Certificate" class="certificate-img" onclick="openModal(this.src)" src="https://drive.google.com/thumbnail?id=1fsAKaESsleA7LoN87aHC-i9WjtCo5Knu&amp;sz=w1200"/>
+<h4>Web Application Pentester</h4>
+<p>Indian Servers Private Limited</p>
+</div>
+<div class="swiper-slide">
+<img alt="React JS Developer Certificate" class="certificate-img" onclick="openModal(this.src)" src="https://drive.google.com/thumbnail?id=1ez78F2D3i8TN7SYrQUVcwwyS5JSKikyT&amp;sz=w1200"/>
+<h4>React JS Developer</h4>
+<p>BRAIN O VISION SOLUTIONS (INDIA) PVT LTD</p>
+</div>
+<div class="swiper-slide">
+<img alt="AWS Cloud Computing Certificate" class="certificate-img" onclick="openModal(this.src)" src="https://drive.google.com/thumbnail?id=1-Si5XDPa-494GIM7scTRusofBvUOH5zM&amp;sz=w1200"/>
+<h4>AWS Cloud Computing</h4>
+<p>APSSDC</p>
+</div>
+<div class="swiper-slide">
+<img alt="Data Science 2.0 Certificate" class="certificate-img" onclick="openModal(this.src)" src="https://drive.google.com/thumbnail?id=1-jzzcXRBNsviljyoS-YzP47YfDaG3rrM&amp;sz=w1200"/>
+<h4>Data Science 2.0</h4>
+<p>Pan Tech E Learning</p>
+</div>
+</div>
+<div class="swiper-button-prev"></div>
+<div class="swiper-button-next"></div>
+</div>
+</section>
+<section id="connect" style="margin-top: -150px !important; margin-bottom: 0 !important; padding-top: 0 !important;">
+<h2>Connect</h2>
+<div class="links">
+<a href="https://github.com/Hariroyal2425" style="margin-right: 20px; text-decoration: none; color: #1c92d2;" target="_blank">
+<i class="fab fa-github"></i>
+          GitHub
+        </a>
+<a href="https://www.linkedin.com/in/harikrishnachandragiri" style="margin-right: 20px; text-decoration: none; color: #1c92d2;" target="_blank">
+<i class="fab fa-linkedin"></i>
+          LinkedIn
+        </a>
+<a href="https://www.facebook.com/share/15pFaUQjiP/" style="margin-right: 20px; text-decoration: none; color: #1c92d2;" target="_blank">
+<i class="fab fa-facebook"></i>
+          Facebook
+        </a>
+<a href="https://www.instagram.com/hariroyal_2425" style="margin-right: 20px; text-decoration: none; color: #1c92d2;" target="_blank">
+<i class="fab fa-instagram"></i>
+          Instagram
+        </a>
+
+</div>
+</section>
+<section id="contact" style="margin-top: -20px !important;">
+<h2>Contact</h2>
+<p style="font-size: 1.1rem; line-height: 2;">
+<img src="https://cdn-icons-png.flaticon.com/512/724/724664.png" style="vertical-align: middle; margin-right: 8px;" width="18">
+<a href="tel:+918978272218" style="color:#1c92d2; text-decoration: none;">+91 8978272218</a>
+</img></p>
+<p style="font-size: 1.1rem; line-height: 2;">
+<img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" style="vertical-align: middle; margin-right: 8px;" width="18"/>
+<a href="mailto:harichandragiri2425@gmail.com" style="color:#1c92d2; text-decoration: none;">harichandragiri2425@gmail.com</a>
+</p>
+<p style="font-size: 1.1rem; line-height: 2;">
+<img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" style="vertical-align: middle; margin-right: 8px;" width="18"/>
+<a href="https://api.whatsapp.com/send?phone=918978272218" style="color:#1c92d2; text-decoration: none;" target="_blank">Chat on WhatsApp</a>
+</p>
+<form action="https://formspree.io/f/mldlgovy" id="contact-form" method="POST">
+<input name="name" placeholder="Your Name" required="" type="text"/>
+<input name="email" placeholder="Your Email" required="" type="email"/>
+<textarea name="message" placeholder="Your Message" required=""></textarea>
+<button type="submit">Send Message</button>
+<div id="form-message"></div>
+</form>
+</section>
+</div>
+<a class="download-btn" download="Hari_Krishna_Resume.pdf" href="https://drive.google.com/uc?export=download&amp;id=1U711IL2nNXEYBurSyXhqoRxl1-94eShD" style="top: auto; right: 20px;">Download My Resume</a>
+<footer style="text-align:center; padding: 20px; background:#1c92d2; color:white; font-weight: 500;">
+    © 2025 Hari Krishna Chandragiri. All rights reserved.
+    <button id="theme-toggle" style="margin-left: 20px; padding: 6px 12px; background:white; color:#1c92d2; border:none; border-radius: 4px; cursor:pointer; font-weight: bold;">Toggle Theme</button>
+</footer>
+<a class="back-to-top" href="#">↑ Back to Top</a>
+<div id="imageModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center; animation: fadeZoom 0.3s ease-out;">
+<span onclick="closeModal()" style="position:absolute; top:20px; right:30px; font-size:2rem; color:white; cursor:pointer; font-weight:bold;">×</span>
+<img id="modalImg" src="" style="width: auto; height: auto; max-width: 80vw; max-height: 80vh; border: 5px solid white; border-radius: 8px; box-shadow: 0 0 20px #000; animation: zoomIn 0.4s ease; user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;"/>
+<button class="modal-button modal-prev" onclick="showPrev()">❮</button>
+<button class="modal-button modal-next" onclick="showNext()">❯</button>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.5/swiper-bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Theme Toggle
+      const themeToggle = document.getElementById('theme-toggle');
+      if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+          const body = document.body;
+          const isDark = body.classList.toggle('dark-mode');
+          localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+
+        if (localStorage.getItem('theme') === 'dark') {
+          document.body.classList.add('dark-mode');
+        }
+      }
+
+      // Hamburger Menu Toggle
+      const hamburger = document.querySelector('.hamburger');
+      const navMenu = document.querySelector('.nav-menu');
+      if (hamburger && navMenu) {
+        hamburger.addEventListener('click', () => {
+          navMenu.classList.toggle('active');
+        });
+      }
+
+      // Smooth Scrolling for Navigation
+      document.querySelectorAll('nav a').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href').substring(1);
+          const targetElement = document.getElementById(targetId);
+          if (targetElement) {
+            targetElement.scrollIntoView({ behavior: 'smooth' });
+            if (navMenu.classList.contains('active')) {
+              navMenu.classList.remove('active');
+            }
+          }
+        });
+      });
+
+      // Back-to-Top Button
+      const backToTop = document.querySelector('.back-to-top');
+      if (backToTop) {
+        backToTop.addEventListener('click', (e) => {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      // Back-to-Top Visibility at Footer
+      const footer = document.querySelector('footer');
+      const backToTopObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          backToTop.style.display = entry.isIntersecting ? 'block' : 'none';
+        });
+      }, { threshold: 0.1 });
+      if (footer && backToTop) {
+        backToTopObserver.observe(footer);
+      }
+
+      // Download Resume Button
+      const downloadBtn = document.querySelector('.download-btn');
+      if (downloadBtn) {
+        downloadBtn.addEventListener('click', (e) => {
+          const url = downloadBtn.getAttribute('href');
+          const tempLink = document.createElement('a');
+          tempLink.href = url;
+          tempLink.download = downloadBtn.getAttribute('download');
+          document.body.appendChild(tempLink);
+          tempLink.click();
+          document.body.removeChild(tempLink);
+          setTimeout(() => {
+            alert('Resume download initiated. If it doesn’t start, contact harichandragiri2425@gmail.com');
+          }, 500);
+        });
+      }
+
+      // Download Button Stop at Footer and Enlarge
+      const downloadObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            downloadBtn.style.bottom = '70px';
+            downloadBtn.classList.add('enlarged');
+          } else {
+            downloadBtn.style.bottom = '20px';
+            downloadBtn.classList.remove('enlarged');
+          }
+        });
+      }, { threshold: 0.1 });
+      if (footer && downloadBtn) {
+        downloadObserver.observe(footer);
+      }
+
+      // Prevent Profile Image Interaction
+      const profileImg = document.querySelector('.profile-img-container img');
+      if (profileImg) {
+        profileImg.addEventListener('contextmenu', (e) => {
+          e.preventDefault();
+        });
+        profileImg.addEventListener('click', (e) => {
+          e.preventDefault();
+        });
+        profileImg.addEventListener('load', () => {
+          console.log('Profile image loaded successfully: https://drive.google.com/thumbnail?id=19I-br8cWq6MVfIEr0iS6CuUuFaJLFXLk&sz=w1200');
+        });
+        profileImg.addEventListener('error', () => {
+          console.error('Profile image failed to load. URL: https://drive.google.com/thumbnail?id=19I-br8cWq6MVfIEr0iS6CuUuFaJLFXLk&sz=w1200. Please set Google Drive sharing to "Anyone with the link" (Viewer role) or contact harichandragiri2425@gmail.com.');
+        });
+      }
+
+      // Project Link Error Handling
+      document.querySelectorAll('.project-link').forEach(link => {
+        link.addEventListener('click', async (e) => {
+          const url = link.href;
+          try {
+            const response = await fetch(url, { method: 'HEAD', mode: 'cors' });
+            if (!response.ok) {
+              e.preventDefault();
+              alert('GitHub repository not accessible. It may be private or unavailable. Contact harichandragiri2425@gmail.com for details.');
+            }
+          } catch (error) {
+            e.preventDefault();
+            alert('Error accessing GitHub repository. Please try again later or contact harichandragiri2425@gmail.com.');
+            console.error('GitHub link error:', error);
+          }
+        });
+      });
+
+      // Contact Link Fallback
+      document.querySelectorAll('#contact a').forEach(link => {
+        link.addEventListener('click', (e) => {
+          const href = link.getAttribute('href');
+          if (href.startsWith('tel:') && !navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|Windows\sPhone)/)) {
+            e.preventDefault();
+            alert('Please use a phone to call +918978272218.');
+          }
+          if (href.startsWith('https://api.whatsapp.com') && !navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|Windows\sPhone)/)) {
+            e.preventDefault();
+            alert('Please use a device with WhatsApp installed to chat.');
+          }
+        });
+      });
+
+      // Scroll-Triggered Animations
+      const sections = document.querySelectorAll('section');
+      const cards = document.querySelectorAll('.card');
+      const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            entry.target.style.opacity = '1';
+          }
+        });
+      }, { threshold: 0.1 });
+
+      sections.forEach(section => {
+        section.style.display = 'block';
+        sectionObserver.observe(section);
+      });
+      cards.forEach(card => {
+        card.style.display = 'block';
+        sectionObserver.observe(card);
+      });
+
+      // Typing Animation for Header
+      if (typeof Typed !== 'undefined') {
+        const typed = new Typed('#typed', {
+          strings: ['Hari Krishna Chandragiri'],
+          typeSpeed: 50,
+          backSpeed: 30,
+          backDelay: 1000,
+          startDelay: 500,
+          loop: false
+        });
+      } else {
+        console.error('Typed.js not loaded. Displaying static text.');
+        document.getElementById('typed').textContent = 'Hari Krishna Chandragiri';
+      }
+
+      // Project Card Skill Tag Animation
+      document.querySelectorAll('.card').forEach(card => {
+        const skillGroup = card.querySelector('.skill-group');
+        if (skillGroup) {
+          const skills = skillGroup.getAttribute('data-skills').split(',');
+          let currentIndex = 0;
+
+          card.addEventListener('mouseenter', () => {
+            const interval = setInterval(() => {
+              const spans = skillGroup.querySelectorAll('span');
+              spans.forEach(span => span.classList.remove('active'));
+              spans[currentIndex].classList.add('active');
+              currentIndex = (currentIndex + 1) % skills.length;
+            }, 1000);
+            card._interval = interval;
+          });
+
+          card.addEventListener('mouseleave', () => {
+            clearInterval(card._interval);
+            const spans = skillGroup.querySelectorAll('span');
+            spans.forEach(span => span.classList.remove('active'));
+            spans.forEach(span => span.style.opacity = '1');
+            currentIndex = 0;
+          });
+        }
+      });
+
+      // Certificate Carousel
+      const swiper = new Swiper('.swiper', {
+        slidesPerView: 3,
+        spaceBetween: 20,
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+          0: { slidesPerView: 1 },
+          600: { slidesPerView: 1 },
+          768: { slidesPerView: 2 },
+          992: { slidesPerView: 3 }
+        },
+      });
+
+      // Certificate Modal
+      let certificates = Array.from(document.querySelectorAll('.certificate-img'));
+      let currentIndex = 0;
+
+      window.openModal = function(src) {
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImg');
+        modal.style.display = 'flex';
+        modalImg.src = src;
+        currentIndex = certificates.findIndex(img => img.src === src);
+      };
+
+      window.closeModal = function() {
+        document.getElementById('imageModal').style.display = 'none';
+      };
+
+      window.showPrev = function() {
+        if (currentIndex > 0) {
+          currentIndex--;
+          document.getElementById('modalImg').src = certificates[currentIndex].src;
+        }
+      };
+
+      window.showNext = function() {
+        if (currentIndex < certificates.length - 1) {
+          currentIndex++;
+          document.getElementById('modalImg').src = certificates[currentIndex].src;
+        }
+      };
+
+      // Prevent Right-Click on Modal Image
+      const modalImg = document.getElementById('modalImg');
+      if (modalImg) {
+        modalImg.addEventListener('contextmenu', (e) => {
+          e.preventDefault();
+        });
+      }
+
+      // Contact Form Submission
+      const form = document.getElementById('contact-form');
+      const formMessage = document.getElementById('form-message');
+      if (form) {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          formMessage.textContent = 'Sending...';
+          try {
+            const response = await fetch(form.action, {
+              method: 'POST',
+              body: new FormData(form),
+              headers: { 'Accept': 'application/json' }
+            });
+            if (response.ok) {
+              formMessage.textContent = 'Message sent successfully!';
+              formMessage.style.color = '#4caf50';
+              form.reset();
+            } else {
+              const errorData = await response.json();
+              formMessage.textContent = `Error: ${errorData.error || 'Failed to send message. Please check your Formspree setup or try again later.'}`;
+              formMessage.style.color = '#e91e63';
+            }
+          } catch (error) {
+            formMessage.textContent = `Network error: ${error.message}. Please try again or contact harichandragiri2425@gmail.com.`;
+            formMessage.style.color = '#e91e63';
+            console.error('Form submission error:', error);
+          }
+        });
+      }
+
+      // Verify Font Awesome Load for X Icon
+      const fontAwesomeLink = document.querySelector('link[href*="font-awesome"]');
+      if (fontAwesomeLink) {
+        fontAwesomeLink.addEventListener('error', () => {
+          console.error('Font Awesome failed to load. Using X fallback image.');
+          document.querySelectorAll('.links a img[alt="X"]').forEach(img => {
+            img.style.display = 'inline-block';
+            img.previousElementSibling.style.display = 'none';
+          });
+        });
+        fontAwesomeLink.addEventListener('load', () => {
+          console.log('Font Awesome loaded successfully.');
+          document.querySelectorAll('.links a i.fa-x-twitter').forEach(icon => {
+            icon.style.display = 'inline-block';
+            icon.nextElementSibling.style.display = 'none';
+          });
+        });
+      }
+    });
+
+    document.addEventListener('keydown', function(e) {
+      const modal = document.getElementById('imageModal');
+      if (modal.style.display === 'flex') {
+        if (e.key === 'ArrowLeft') showPrev();
+        else if (e.key === 'ArrowRight') showNext();
+        else if (e.key === 'Escape') closeModal();
+      }
+    });
+  </script>
+</body>
+</html>
